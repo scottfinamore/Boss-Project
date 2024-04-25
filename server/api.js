@@ -2,6 +2,7 @@ const express = require("express");
 const res = require("express/lib/response");
 const apiRouter = express.Router();
 const db = require("./db");
+const checkMillionDollarIdea = require("./checkMillionDollarIdea");
 
 // Routes for /api/minions
 apiRouter.get("/minions", (req, res, next) => {
@@ -50,7 +51,7 @@ apiRouter.get("/ideas", (req, res, next) => {
   res.status(200).json(ideas);
 });
 
-apiRouter.post("/ideas", (req, res, next) => {
+apiRouter.post("/ideas", checkMillionDollarIdea, (req, res, next) => {
   const newIdea = req.body;
   const createdIdea = db.addToDatabase("ideas", newIdea);
   res.status(201).json(createdIdea);
@@ -65,7 +66,7 @@ apiRouter.get("/ideas/:ideaId", (req, res, next) => {
   }
 });
 
-apiRouter.put("/ideas/:ideaId", (req, res, next) => {
+apiRouter.put("/ideas/:ideaId", checkMillionDollarIdea, (req, res, next) => {
   const updatedIdea = req.body;
   updatedIdea.id = req.params.ideaId;
   const result = db.updateInstanceInDatabase("ideas", updatedIdea);
